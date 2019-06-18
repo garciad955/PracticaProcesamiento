@@ -52,9 +52,9 @@ public class PixelManipulation extends javax.swing.JFrame {
         binarizar = new javax.swing.JRadioButton();
         resetear = new javax.swing.JButton();
         guardar = new javax.swing.JButton();
-        avering = new javax.swing.JRadioButton();
-        gaussian = new javax.swing.JRadioButton();
-        media = new javax.swing.JRadioButton();
+        Avering = new javax.swing.JSlider();
+        Gaussian = new javax.swing.JSlider();
+        Median = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -148,27 +148,42 @@ public class PixelManipulation extends javax.swing.JFrame {
             }
         });
 
-        avering.setFont(new java.awt.Font("Tempus Sans ITC", 0, 11)); // NOI18N
-        avering.setText("AVERING FILTER");
-        avering.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                averingActionPerformed(evt);
+        Avering.setMaximum(10);
+        Avering.setMinorTickSpacing(1);
+        Avering.setPaintLabels(true);
+        Avering.setPaintTicks(true);
+        Avering.setSnapToTicks(true);
+        Avering.setValue(0);
+        Avering.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "AVERING", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tempus Sans ITC", 0, 11))); // NOI18N
+        Avering.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                AveringStateChanged(evt);
             }
         });
 
-        gaussian.setFont(new java.awt.Font("Tempus Sans ITC", 0, 11)); // NOI18N
-        gaussian.setText("GAUSSIAN FILTER");
-        gaussian.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gaussianActionPerformed(evt);
+        Gaussian.setMaximum(10);
+        Gaussian.setMinorTickSpacing(1);
+        Gaussian.setPaintLabels(true);
+        Gaussian.setPaintTicks(true);
+        Gaussian.setSnapToTicks(true);
+        Gaussian.setValue(0);
+        Gaussian.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GAUSSIAN", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tempus Sans ITC", 0, 11))); // NOI18N
+        Gaussian.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                GaussianStateChanged(evt);
             }
         });
 
-        media.setFont(new java.awt.Font("Tempus Sans ITC", 0, 11)); // NOI18N
-        media.setText("MEDIA FILTER");
-        media.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mediaActionPerformed(evt);
+        Median.setMaximum(10);
+        Median.setMinorTickSpacing(1);
+        Median.setPaintLabels(true);
+        Median.setPaintTicks(true);
+        Median.setSnapToTicks(true);
+        Median.setValue(0);
+        Median.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "MEDIAN", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tempus Sans ITC", 0, 11))); // NOI18N
+        Median.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                MedianStateChanged(evt);
             }
         });
 
@@ -177,7 +192,7 @@ public class PixelManipulation extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jLabel_Image1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -186,29 +201,30 @@ public class PixelManipulation extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(briloo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(gamma, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(contraste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                            .addComponent(contraste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(negative)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(binarizar)
+                        .addGap(81, 81, 81)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(guardar)
-                            .addComponent(resetear))
-                        .addGap(71, 71, 71))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addComponent(jLabel_Image2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Gaussian, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Avering, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Median, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(negative)
-                                .addGap(39, 39, 39)
-                                .addComponent(avering))
-                            .addComponent(jLabel_Image2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(binarizar)
-                                .addGap(43, 43, 43)
-                                .addComponent(gaussian))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(120, 120, 120)
-                                .addComponent(media)))
-                        .addGap(43, 43, 43))))
+                                .addComponent(resetear)
+                                .addGap(86, 86, 86)
+                                .addComponent(guardar)
+                                .addGap(63, 63, 63)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(162, 162, 162)
                 .addComponent(jButton_SelectImage, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -223,33 +239,27 @@ public class PixelManipulation extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_Image1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_Image2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(briloo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(resetear)
-                                .addGap(13, 13, 13)
-                                .addComponent(guardar))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(gamma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(contraste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(gamma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(contraste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(negative)
-                            .addComponent(avering, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Avering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(gaussian, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(binarizar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Gaussian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(media, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(Median, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(negative)
+                    .addComponent(binarizar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resetear)
+                    .addComponent(guardar))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -392,6 +402,12 @@ public class PixelManipulation extends javax.swing.JFrame {
         gamma.setValue(0);
         briloo.setValue(0);
         contraste.setValue(0);
+        Avering.setValue(0);
+        prevAver = 0;
+        Gaussian.setValue(0);
+        prevGaus = 0;
+        Median.setValue(0);
+        prevMedia = 0;
 
 
     }//GEN-LAST:event_resetearActionPerformed
@@ -425,12 +441,18 @@ public class PixelManipulation extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_binarizarActionPerformed
+    int actualAver = 0, prevAver = 0;
+    private void AveringStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_AveringStateChanged
 
-    private void averingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_averingActionPerformed
-        // TODO add your handling code here:
-        if (avering.isSelected()) {
-            Mat imagen = myImage;
-            double[] resultado;
+        Mat imagen = myImage;
+        JSlider source = (JSlider) evt.getSource();
+        double[] resultado;
+        // byte[] bufferTemp =img.toBytes(temporalImage);
+        actualAver = source.getValue();
+
+        
+        
+        if (actualAver > prevAver) {
 
             for (int i = 0; i < imagen.rows() - 2; i++) {
                 for (int j = 0; j < imagen.cols() - 2; j++) {
@@ -440,45 +462,66 @@ public class PixelManipulation extends javax.swing.JFrame {
                     imagen.put(i + 1, j + 1, resultado);
                 }
             }
-            Image image = img.toImage(imagen, buffer);
-            jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+            prevAver = actualAver;
         }
-
-    }//GEN-LAST:event_averingActionPerformed
-
-    private void gaussianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gaussianActionPerformed
+        Image image = img.toImage(imagen, buffer);
+        jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+        
+    }//GEN-LAST:event_AveringStateChanged
+    int prevGaus = 0, actGaus = 0;
+    private void GaussianStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_GaussianStateChanged
         // TODO add your handling code here:
-        if (gaussian.isSelected()) {
-            Mat imagen = myImage;
-            double[] resultado;
+        Mat imagen = myImage;
+        JSlider source = (JSlider) evt.getSource();
+        double[] resultado;
+        // byte[] bufferTemp =img.toBytes(temporalImage);
+        actGaus = source.getValue();
+
+        
+        
+        if (actGaus > prevGaus) {
+
             for (int i = 0; i < imagen.rows() - 2; i++) {
                 for (int j = 0; j < imagen.cols() - 2; j++) {
 
                     resultado = Filters.gaussian(imagen, i, j);
+
                     imagen.put(i + 1, j + 1, resultado);
                 }
             }
-            Image image = img.toImage(imagen, buffer);
-            jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+            prevGaus = actGaus;
         }
-    }//GEN-LAST:event_gaussianActionPerformed
-
-    private void mediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaActionPerformed
+        Image image = img.toImage(imagen, buffer);
+        jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+        
+    }//GEN-LAST:event_GaussianStateChanged
+    int prevMedia = 0, actMedia = 0;
+    private void MedianStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_MedianStateChanged
         // TODO add your handling code here:
-        if (media.isSelected()) {
-            Mat imagen = myImage;
-            double[] resultado;
+        Mat imagen = myImage;
+        JSlider source = (JSlider) evt.getSource();
+        double[] resultado;
+        // byte[] bufferTemp =img.toBytes(temporalImage);
+        actMedia = source.getValue();
+
+        
+        
+        if (actMedia > prevMedia) {
+
             for (int i = 0; i < imagen.rows() - 2; i++) {
                 for (int j = 0; j < imagen.cols() - 2; j++) {
 
                     resultado = Filters.media(imagen, i, j);
+
                     imagen.put(i + 1, j + 1, resultado);
                 }
             }
-            Image image = img.toImage(imagen, buffer);
-            jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+            prevMedia = actMedia;
         }
-    }//GEN-LAST:event_mediaActionPerformed
+        Image image = img.toImage(imagen, buffer);
+        jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+        
+    }//GEN-LAST:event_MedianStateChanged
 
     /**
      * @param args the command line arguments
@@ -515,18 +558,18 @@ public class PixelManipulation extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton avering;
+    private javax.swing.JSlider Avering;
+    private javax.swing.JSlider Gaussian;
+    private javax.swing.JSlider Median;
     private javax.swing.JRadioButton binarizar;
     private javax.swing.JSlider briloo;
     private javax.swing.JSlider contraste;
     private javax.swing.JSlider gamma;
-    private javax.swing.JRadioButton gaussian;
     private javax.swing.JButton guardar;
     private javax.swing.JButton jButton_SelectImage;
     private javax.swing.JLabel jLabel_Image1;
     private javax.swing.JLabel jLabel_Image2;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton media;
     private javax.swing.JRadioButton negative;
     private javax.swing.JButton resetear;
     // End of variables declaration//GEN-END:variables
