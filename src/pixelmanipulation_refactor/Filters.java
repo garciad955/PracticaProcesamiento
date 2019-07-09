@@ -6,6 +6,7 @@
 package pixelmanipulation_refactor;
 
 import java.util.Arrays;
+import org.jfree.ui.RefineryUtilities;
 import org.opencv.core.Mat;
 
 /**
@@ -239,5 +240,5 @@ public class Filters {
        
         return colores;
     }
-
+    
 }

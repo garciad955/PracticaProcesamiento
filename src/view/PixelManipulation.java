@@ -5,18 +5,34 @@
  */
 package view;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.Paint;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.xml.bind.DatatypeConverter;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.statistics.HistogramDataset;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import pixelmanipulation_refactor.CustomImage;
 import pixelmanipulation_refactor.Filters;
+import pixelmanipulation_refactor.HistogramTest;
 import pixelmanipulation_refactor.MyImage;
 import pixelmanipulation_refactor.imageRotate;
 
@@ -29,6 +45,8 @@ public class PixelManipulation extends javax.swing.JFrame {
     /**
      * Creates new form PixelManipulation
      */
+    BufferedImage imag;
+    
     public PixelManipulation() {
         initComponents();
         setLocationRelativeTo(null);
@@ -65,6 +83,15 @@ public class PixelManipulation extends javax.swing.JFrame {
         aplicar = new javax.swing.JButton();
         escalado = new javax.swing.JSlider();
         grados = new javax.swing.JSlider();
+        jPanel4 = new javax.swing.JPanel();
+        histograma = new javax.swing.JButton();
+        rojo = new javax.swing.JRadioButton();
+        azul = new javax.swing.JRadioButton();
+        verde = new javax.swing.JRadioButton();
+        sobel = new javax.swing.JButton();
+        Laplace = new javax.swing.JButton();
+        Canny = new javax.swing.JButton();
+        fourier = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -286,6 +313,82 @@ public class PixelManipulation extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("E.R.T", jPanel3);
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        histograma.setText("CREAR HISTOGRAMA");
+        histograma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histogramaActionPerformed(evt);
+            }
+        });
+
+        rojo.setText("ROJO");
+
+        azul.setText("AZUL");
+
+        verde.setText("VERDE");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(57, 68, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(histograma)
+                        .addGap(128, 128, 128))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(azul)
+                        .addGap(52, 52, 52)
+                        .addComponent(verde)
+                        .addGap(45, 45, 45)
+                        .addComponent(rojo)
+                        .addGap(69, 69, 69))))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rojo)
+                    .addComponent(verde)
+                    .addComponent(azul))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(histograma)
+                .addGap(33, 33, 33))
+        );
+
+        jTabbedPane3.addTab("Histograma", jPanel4);
+
+        sobel.setText("Sobel");
+        sobel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sobelActionPerformed(evt);
+            }
+        });
+
+        Laplace.setText("Laplace");
+        Laplace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LaplaceActionPerformed(evt);
+            }
+        });
+
+        Canny.setText("Canny");
+        Canny.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CannyActionPerformed(evt);
+            }
+        });
+
+        fourier.setText("Fourier");
+        fourier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fourierActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -307,19 +410,26 @@ public class PixelManipulation extends javax.swing.JFrame {
                                 .addComponent(binarizar)
                                 .addGap(81, 81, 81)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel_Image2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(218, 218, 218))
+                        .addGap(46, 46, 46)
+                        .addComponent(sobel))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(resetear)
-                            .addComponent(guardar))
-                        .addGap(66, 66, 66))))
+                            .addComponent(guardar)
+                            .addComponent(resetear)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(446, 446, 446)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Laplace)
+                            .addComponent(Canny)
+                            .addComponent(fourier))))
+                .addGap(50, 50, 50))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(162, 162, 162)
+                .addGap(96, 96, 96)
                 .addComponent(jButton_SelectImage, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -328,31 +438,42 @@ public class PixelManipulation extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton_SelectImage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel_Image1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_Image2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel_Image1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel_Image2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(briloo, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(gamma, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(contraste, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(66, 66, 66)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(negative)
-                                    .addComponent(binarizar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(briloo, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(gamma, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(contraste, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(66, 66, 66)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(negative)
+                                            .addComponent(binarizar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(209, 209, 209)
+                                .addComponent(resetear)
+                                .addGap(18, 18, 18)
+                                .addComponent(guardar))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addComponent(resetear)
-                        .addGap(32, 32, 32)
-                        .addComponent(guardar)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addGap(23, 23, 23)
+                        .addComponent(sobel)
+                        .addGap(23, 23, 23)
+                        .addComponent(Laplace)
+                        .addGap(23, 23, 23)
+                        .addComponent(Canny)
+                        .addGap(23, 23, 23)
+                        .addComponent(fourier)))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -629,13 +750,120 @@ public class PixelManipulation extends javax.swing.JFrame {
             alto = imagen.rows();
         }
 
-        
         imagen = imageRotate.rotationImage(imagen, teta, escalado, desplazamientoX, desplazamientoY);
 
         Image image = img.toImage(imagen, buffer);
         jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
 
     }//GEN-LAST:event_aplicarActionPerformed
+    
+    
+    private void histogramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histogramaActionPerformed
+        // TODO add your handling code here:
+        
+        
+        Mat imagen = myImage;
+        byte[] buffer = img.toBytes(imagen);
+        boolean[] colorSlected = new boolean[3];
+        
+        colorSlected[0] = rojo.isSelected();
+        colorSlected[1] = azul.isSelected();
+        colorSlected[2] = verde.isSelected();
+        JFreeChart chart = HistogramTest.histograma(buffer, imagen, colorSlected);
+        
+        XYPlot plot = (XYPlot) chart.getPlot();
+        
+        plot.setForegroundAlpha(0.75f);
+        NumberAxis axis = (NumberAxis) plot.getDomainAxis();
+        axis.setAutoRangeIncludesZero(false);
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setNumberFormatOverride(NumberFormat.getIntegerInstance());
+        
+        ChartFrame panel = new ChartFrame("Histograma", chart);
+        panel.setSize(750,500);
+        panel.setVisible(true);
+        panel.setLocationRelativeTo(null);
+
+    }//GEN-LAST:event_histogramaActionPerformed
+
+    private void sobelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sobelActionPerformed
+        // TODO add your handling code here:
+        Mat imagen = myImage;
+        //Mat sobel = new Mat();
+        
+        //sobel = imageRotate.doSobel(imagen);
+        
+        
+        Mat sobel = new Mat();
+        Imgproc.Sobel(imagen, sobel, -1, 1, 0);
+        byte[] bufferSobel = img.toBytes(sobel);
+        Image image = img.toImage(sobel, bufferSobel);
+        System.out.println("pasa segundo filtrp");
+        jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+    }//GEN-LAST:event_sobelActionPerformed
+
+    private void LaplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LaplaceActionPerformed
+        // TODO add your handling code here:
+        Mat imagen = myImage;
+        Mat laplace = new Mat();
+        Imgproc.Laplacian(imagen, laplace, imagen.depth());
+        Core.convertScaleAbs(laplace, laplace);
+        Image image = img.toImage(laplace, buffer);
+        jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+    }//GEN-LAST:event_LaplaceActionPerformed
+
+    private void CannyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CannyActionPerformed
+        // TODO add your handling code here:
+        Mat imagen = myImage;
+        Mat canny = new Mat();
+        Imgproc.cvtColor(imagen, canny, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.Canny(imagen, canny, 10, 100,3,false);
+        byte[] bufferCanny = img.toBytes(canny);
+        Image image = img.toImage(canny, bufferCanny);
+        jLabel_Image2.setIcon(new ImageIcon(image.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), Image.SCALE_DEFAULT)));
+    }//GEN-LAST:event_CannyActionPerformed
+
+    private void fourierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourierActionPerformed
+        // TODO add your handling code here:
+        Mat fourier =new Mat();
+        Mat image = myImage;
+        Imgproc.cvtColor (image, fourier, Imgproc.COLOR_BGR2GRAY); 
+        Mat tra=new Mat();
+        fourier.convertTo(tra,CvType.CV_32FC1);
+        ArrayList <Mat> matList=new ArrayList<Mat>();
+        matList.add(tra);
+        Mat zeroMat =Mat.zeros(tra.size(), CvType.CV_32F);
+        matList.add(zeroMat);
+        Mat complexImage= new Mat();
+        Core.merge(matList,complexImage);
+        Core.dft(complexImage,complexImage);
+        ArrayList <Mat>splitted = new ArrayList();
+        Core.split(complexImage, splitted);
+        Mat magnitude = new Mat();
+        Core.magnitude(splitted.get(0),splitted.get(1), magnitude);
+        Core.add(Mat.ones(magnitude.size(),CvType.CV_32F),magnitude, magnitude);
+        Core.log(magnitude, magnitude);
+        int cx=magnitude.cols()/2;
+        int cy=magnitude.rows()/2;
+       
+        Mat q0=new Mat(magnitude,new Rect(0,0,cx,cy));
+        Mat q1=new Mat (magnitude,new Rect(cx,0,cx,cy));
+        Mat q2=new Mat (magnitude, new Rect(0,cy,cx,cy));
+        Mat q3=new Mat (magnitude,new Rect (cx,cy,cx,cy));
+        Mat tmp=new Mat();
+        q0.copyTo(tmp);
+        q3.copyTo(q0);
+        tmp.copyTo(q3);
+        q1.copyTo(tmp);
+        q2.copyTo(q1);
+        tmp.copyTo(q2);
+        magnitude.convertTo(magnitude,CvType.CV_8UC1);
+        Core.normalize(magnitude,magnitude,0,255,Core.NORM_MINMAX,CvType.CV_8UC1);
+        byte[] bufferFourier = img.toBytes(magnitude);
+        Image imagen = img.toImage(magnitude, bufferFourier);
+        jLabel_Image2.setIcon(new ImageIcon(imagen.getScaledInstance(this.jLabel_Image2.getWidth(), this.jLabel_Image2.getHeight(), imagen.SCALE_DEFAULT)));
+        
+    }//GEN-LAST:event_fourierActionPerformed
 
     /**
      * @param args the command line arguments
@@ -673,25 +901,34 @@ public class PixelManipulation extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSlider Avering;
+    private javax.swing.JButton Canny;
     private javax.swing.JSlider Gaussian;
+    private javax.swing.JButton Laplace;
     private javax.swing.JSlider Median;
     private javax.swing.JButton aplicar;
+    private javax.swing.JRadioButton azul;
     private javax.swing.JRadioButton binarizar;
     private javax.swing.JSlider briloo;
     private javax.swing.JSlider contraste;
     private javax.swing.JSlider escalado;
+    private javax.swing.JButton fourier;
     private javax.swing.JSlider gamma;
     private javax.swing.JSlider grados;
     private javax.swing.JButton guardar;
+    private javax.swing.JButton histograma;
     private javax.swing.JButton jButton_SelectImage;
     private javax.swing.JLabel jLabel_Image1;
     private javax.swing.JLabel jLabel_Image2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JRadioButton negative;
     private javax.swing.JButton resetear;
+    private javax.swing.JRadioButton rojo;
+    private javax.swing.JButton sobel;
+    private javax.swing.JRadioButton verde;
     // End of variables declaration//GEN-END:variables
     private Mat myImage;
     private byte[] buffer;
